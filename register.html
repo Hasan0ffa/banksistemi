@@ -1,0 +1,37 @@
+<!-- templates/register.html -->
+{% extends 'base.html' %}
+
+{% block title %}Qeydiyyat{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-pink text-white">
+                <h3 class="mb-0">Qeydiyyat</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('register') }}">
+                    <div class="mb-3">
+                        <label for="fullname" class="form-label">Ad Soyad</label>
+                        <input type="text" class="form-control form-control-lg" id="fullname" name="fullname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Şifrə</label>
+                        <input type="password" class="form-control form-control-lg" id="password" name="password" required>
+                        <div class="form-text text-muted">Şifrəniz ən azı 8 simvoldan ibarət olmalıdır.</div>
+                    </div>
+                    <button type="submit" class="btn btn-pink btn-lg w-100 mb-3">Qeydiyyatdan keç</button>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                Artıq hesabınız var? <a href="{{ url_for('login') }}" class="text-decoration-none">Daxil olun</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

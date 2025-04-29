@@ -1,0 +1,44 @@
+<!-- templates/transfer.html -->
+{% extends 'base.html' %}
+
+{% block title %}Pul Köçürmə{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-ink text-white">
+                <h3 class="mb-0">Pul Köçürmə</h3>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <h5 class="mb-1">Hesab Nömrəsi</h5>
+                    <p class="mb-0 fs-5">{{ account.account_number }}</p>
+                </div>
+                <div class="mb-4">
+                    <h5 class="mb-1">Cari Balans</h5>
+                    <p class="mb-0 fs-4 fw-bold">{{ account.balance }} AZN</p>
+                </div>
+                <form method="POST" action="{{ url_for('transfer', account_id=account.id) }}">
+                    <div class="mb-3">
+                        <label for="recipient_account" class="form-label">Alıcı Hesab Nömrəsi</label>
+                        <input type="text" class="form-control form-control-lg" id="recipient_account" name="recipient_account" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Məbləğ (AZN)</label>
+                        <input type="number" class="form-control form-control-lg" id="amount" name="amount" min="0.01" step="0.01" max="{{ account.balance }}" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Təsvir</label>
+                        <input type="text" class="form-control" id="description" name="description" placeholder="Məs: Kirayə ödənişi">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-pink text-white btn-lg">Pul Köçür</button>
+                        <a href="{{ url_for('account_details', account_id=account.id) }}" class="btn btn-secondary">Geri</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

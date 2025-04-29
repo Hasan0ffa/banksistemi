@@ -1,0 +1,40 @@
+<!-- templates/withdraw.html -->
+{% extends 'base.html' %}
+
+{% block title %}Pul Çıxarma{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-pink text-dark">
+                <h3 class="mb-0">Pul Çıxarma</h3>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4">
+                    <h5 class="mb-1">Hesab Nömrəsi</h5>
+                    <p class="mb-0 fs-5">{{ account.account_number }}</p>
+                </div>
+                <div class="mb-4">
+                    <h5 class="mb-1">Cari Balans</h5>
+                    <p class="mb-0 fs-4 fw-bold">{{ account.balance }} AZN</p>
+                </div>
+                <form method="POST" action="{{ url_for('withdraw', account_id=account.id) }}">
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">Məbləğ (AZN)</label>
+                        <input type="number" class="form-control form-control-lg" id="amount" name="amount" min="0.01" step="0.01" max="{{ account.balance }}" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Təsvir</label>
+                        <input type="text" class="form-control" id="description" name="description" placeholder="Məs: ATM çıxarışı">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-pink btn-lg">Pul Çıxar</button>
+                        <a href="{{ url_for('account_details', account_id=account.id) }}" class="btn btn-secondary">Geri</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

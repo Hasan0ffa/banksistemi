@@ -1,0 +1,52 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}İdarə Paneli{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h2>Xoş gəlmisiniz, {{ user.fullname }}!</h2>
+        <p class="text-muted">Email: {{ user.email }}</p>
+    </div>
+</div>
+
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h3>Hesablarım</h3>
+    </div>
+    <div class="col-md-4 text-end">
+        <form method="POST" action="{{ url_for('create_account') }}">
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Yeni Hesab Yarat
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% for account in accounts %}
+    <div class="col-md-4">
+        <div class="card account-card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ account.account_number }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Yaradılıb: {{ account.created_at.strftime('%d/%m/%Y') }}</h6>
+                <p class="card-text fs-4 mt-3 fw-bold">{{ account.balance }} AZN</p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="{{ url_for('account_details', account_id=account.id) }}" class="btn btn-primary btn-sm">Ətraflı</a>
+                    <a href="{{ url_for('deposit', account_id=account.id) }}" class="btn btn-success btn-sm">Pul yatır</a>
+                    <a href="{{ url_for('withdraw', account_id=account.id) }}" class="btn btn-warning btn-sm">Pul çıxar</a>
+                    <a href="{{ url_for('transfer', account_id=account.id) }}" class="btn btn-info btn-sm text-white">Köçür</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            Hələ hesabınız yoxdur. Yeni hesab yaratmaq üçün "Yeni Hesab Yarat" düyməsini sıxın.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

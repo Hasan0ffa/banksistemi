@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Hesab Məlumatları{% endblock %}
+{% block content %}
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <h2>Hesab Məlumatları</h2>
+        <h4 class="text-muted">{{ account.account_number }}</h4>
+        <p class="lead fs-3 mt-3">
+          Balans: <span class="fw-bold">{{ account.balance }} AZN</span>
+        </p>
+      </div>
+      <div class="col-md-4 text-end">
+        <div class="d-flex flex-column gap-2">
+          <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Geri</a>
+          <a href="{{ url_for('deposit', account_id=account.id) }}" class="btn btn-success">Pul yatır</a>
+          <a href="{{ url_for('withdraw', account_id=account.id) }}" class="btn btn-warning">Pul çıxar</a>
+          <a href="{{ url_for('transfer', account_id=account.id) }}" class="btn btn-info text-white">Köçür</a>
+
+          <!-- Hesabın silinməsi düyməsi -->
+          <form action="{{ url_for('delete_account', account_id=account.id) }}" method="POST"
+            onsubmit="return confirm('Bu hesabı silmək istədiyinizə əminsiniz? Bu əməliyyat geri alına bilməz.')">
+            <button type="submit" class="btn btn-danger">Hesabı Sil</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header" style="background-color: #f06292; color: white;">
+    <h3 class="mb-0">Əməliyyat Tarixçəsi</h3>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-striped mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Tarix</th>
+            <th>Növ</th>
+            <th>Məbləğ</th>
+            <th>Təsvir</th>
+            <th>Alıcı Hesab</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for transaction in transactions %}
+          <tr>
+            <td>{{ transaction.timestamp.strftime('%d/%m/%Y') }}</td>
+            <td>
+              {% if transaction.transaction_type == 'deposit' %}
+                <span class="badge bg-success">Mədaxil</span>
+              {% elif transaction.transaction_type == 'withdrawal' %}
+                <span class="badge bg-warning text-dark">Məxaric</span>
+              {% elif transaction.transaction_type == 'transfer_out' %}
+                <span class="badge bg-danger">Köçürmə (Çıxan)</span>
+              {% elif transaction.transaction_type == 'transfer_in' %}
+                <span class="badge bg-info text-white">Köçürmə (Gələn)</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if transaction.transaction_type in ['withdrawal', 'transfer_out'] %}
+                <span class="text-danger">-{{ transaction.amount }} AZN</span>
+              {% else %}
+                <span class="text-success">+{{ transaction.amount }} AZN</span>
+              {% endif %}
+            </td>
+            <td>{{ transaction.description }}</td>
+            <td>
+              {{ transaction.recipient_account if transaction.recipient_account else '-' }}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="text-center py-4">
+              Hələ heç bir əməliyyat aparılmayıb.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
